@@ -62,6 +62,8 @@ Use only the sections that actually apply — don't ship empty headings:
 ### Added / ### Changed / ### Fixed / ### Removed / ### Deprecated / ### Security
 -->
 
+## [0.1.0] - 2026-08-13
+
 ### Fixed
 
 - The Python build could never have worked: `src/python/AlvConverter.spec`
@@ -109,7 +111,6 @@ Use only the sections that actually apply — don't ship empty headings:
   PyInstaller's work directory, any local build venv); `.cursorignore` also
   excludes `src/bin/`, which holds a 100 MB `ffmpeg.exe`
 
-## [0.1.0] - 2026-08-13
 
 ### Added
 
@@ -149,6 +150,9 @@ Use only the sections that actually apply — don't ship empty headings:
   plus `GEMINI.md`, `.kiro/steering/` and the `.specify/` templates
 - `docs/alpemix-alv-converter-analysis.md` — the five-lens self-audit run at
   build completion: mechanical gate results, and the six findings it turned up
+- `THIRD_PARTY_NOTICES.md` — provenance and SHA-256 of every binary in the
+  release archive, the FFmpeg build's licence class, and an explicit statement
+  that no Alpemix code, binary or recording is distributed here
 
 ### Changed
 
