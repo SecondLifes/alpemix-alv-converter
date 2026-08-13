@@ -68,3 +68,10 @@ Thumbs.db
 #   examples/
 #   docs/
 # =============================================================================
+
+# --- Working staging area ---
+# src/temp holds build scratch only: Delphi .dcu output, PyInstaller's work
+# directory, and any local build venv. Nothing in it is worth indexing, and
+# ffmpeg.exe under src/bin is 100 MB of binary.
+src/temp/
+src/bin/

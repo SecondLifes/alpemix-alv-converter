@@ -16,7 +16,7 @@ yerine.
 | [FFmpeg](https://ffmpeg.org/) | Yeniden oluşturulan kareleri MP4'e kodlar. Vendor'lanan build [gyan.dev](https://www.gyan.dev/ffmpeg/builds/)'den; bu kitin öğrettiği provenance ve hash disiplini onun etrafında yazıldı | GPLv3 (bu build; bkz. `third-party-licensing.md`) |
 | [Pillow](https://python-pillow.org/) | Python implementasyonunda codec-1 JPEG yüklerini çözer ve PNG kareleri yazar | MIT-CMU |
 | [zlib](https://zlib.net/) | Codec-0 yükleri zlib akışıdır; savunmacı boyut doğrulama kuralı bunun etrafında kuruludur | zlib |
-| [PyInstaller](https://pyinstaller.org/) | Python build'inin tek dosya paketlemesi — Python, Pillow ve FFmpeg birlikte | GPLv2+ (bootloader istisnasıyla) |
+| [PyInstaller](https://pyinstaller.org/) | Python build'inin tek dosya paketlemesi — Python ve Pillow birlikte | GPLv2+ (bootloader istisnasıyla) |
 | [x264](https://www.videolan.org/developers/x264.html) | Vendor'lanan FFmpeg build'inde mevcut ve lisans sınıfının GPLv3 olmasının sebebi — `third-party-licensing.md` tam bu vakayı anlatır | GPLv2+ |
 
 ## 💼 Ticari

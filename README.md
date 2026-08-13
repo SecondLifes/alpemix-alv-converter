@@ -149,7 +149,7 @@ reads correctly against the other.
 | Pillow 12.x | JPEG decode, PNG write (Python) | Decoded dimensions validated against the enclosing region |
 | zlib | Codec-0 payloads | Expanded size checked against the ceiling *and* the exact expected bitmap length |
 | Windows GDI | 8-bit halftone palette (Delphi) | Obtained at runtime — never a hardcoded table |
-| PyInstaller | One-file Windows EXE | Bundles Python, Pillow and FFmpeg, plus the licence text |
+| PyInstaller | One-file Windows EXE | Bundles Python and Pillow; FFmpeg stays a separate file beside the executable, with its licence text |
 
 ---
 

@@ -146,7 +146,7 @@ diğerine karşı da doğru okunur.
 | Pillow 12.x | JPEG çözme, PNG yazma (Python) | Çözülen boyutlar kapsayan bölgeye karşı doğrulanır |
 | zlib | Codec-0 yükleri | Genişlemiş boyut hem tavana hem beklenen tam bitmap uzunluğuna karşı kontrol edilir |
 | Windows GDI | 8-bit halftone paleti (Delphi) | Çalışma zamanında alınır — asla sabit tablo değil |
-| PyInstaller | Tek dosya Windows EXE | Python, Pillow ve FFmpeg'i lisans metniyle birlikte paketler |
+| PyInstaller | Tek dosya Windows EXE | Python ve Pillow'u paketler; FFmpeg lisans metniyle birlikte çalıştırılabılirin yanında ayrı dosya olarak kalır |
 
 ---
 

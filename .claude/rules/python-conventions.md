@@ -106,11 +106,16 @@ will quietly rot. Details in `testing.md`.
 
 ## Packaging
 
-PyInstaller one-file (`AlvConverter.spec`, `build_exe.ps1`), bundling
-Python, Pillow **and** FFmpeg so the target machine needs nothing
-installed. This is the opposite of the Delphi side's deliberate
-side-by-side layout — see `third-party-licensing.md`, which covers what
-each choice obliges you to ship.
+PyInstaller one-file (`AlvConverter.spec`, `build_exe.bat`), bundling
+Python and Pillow so the target machine needs neither installed. The
+artifact is `src/bin/AlvConverter-Python.exe` — named apart from the Delphi
+build's `AlvConverter.exe`, which lands in the same folder.
+
+**FFmpeg is not embedded.** It sits beside the executable exactly as it does
+on the Delphi side, and `resolve_ffmpeg()` finds it there via
+`Path(sys.executable).with_name("ffmpeg.exe")` — the real executable path
+when frozen, not the unpacked `_MEIPASS` directory. See
+`third-party-licensing.md` for what that obliges you to ship.
 
 ## No lint configuration — say so
 

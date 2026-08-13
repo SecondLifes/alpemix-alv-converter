@@ -29,15 +29,16 @@ answer checkable rather than merely stated.
 
 ## Ship the licence text with the binary
 
-`FFMPEG_LICENSE.txt` travels **beside the executable** and is embedded in
-the one-file bundle. It is not a link, not a reference in a README.
+`FFMPEG_LICENSE.txt` travels **beside the executable**, in the same folder
+as `ffmpeg.exe` itself. It is not a link, not a reference in a README.
 
-## Two bundling strategies, both deliberate
+## One bundling strategy, deliberately
 
 | | Delphi build | Python build |
 |---|---|---|
-| Layout | `AlvConverter.exe` + `ffmpeg.exe` side by side | PyInstaller one-file, FFmpeg embedded |
-| Requirement | both files stay in the same directory | none |
+| Artifact | `AlvConverter.exe` (RAD Studio) | `AlvConverter-Python.exe` (PyInstaller one-file) |
+| Layout | `AlvConverter.exe` + `ffmpeg.exe` side by side | `AlvConverter-Python.exe` + `ffmpeg.exe` side by side |
+| Requirement | both files stay in the same directory | both files stay in the same directory |
 
 The Delphi build **deliberately does not embed FFmpeg as `RCDATA`.** Both
 READMEs say so explicitly, because it looks like an oversight otherwise and
@@ -45,12 +46,24 @@ someone will helpfully "fix" it. Keeping the binary as a separate,
 replaceable file keeps its identity and licence visible, and lets it be
 swapped or updated without rebuilding the converter.
 
-The Python build embeds it because a one-file EXE is the whole point of
-that artifact — and it therefore also embeds the licence text.
+The Python build **also** leaves it out, for the same reasons. PyInstaller
+still produces a one-file EXE — that part is the point of the artifact — but
+what it packs is Python and Pillow, not FFmpeg. Embedding a 100 MB GPL
+binary into the executable would quadruple its size, hide which build is in
+the box, and make replacing it a rebuild instead of a file copy.
 
-Whichever strategy applies, the obligation is identical: **the licence
-travels with the binary.** Neither is "the correct one"; they are two
-answers to a distribution question, and both are documented as choices.
+The corollary is that **both builds are incomplete on their own.** Neither
+executable can convert anything without `ffmpeg.exe` in its folder, and
+`build_exe.bat` refuses to build if `ffmpeg.exe` or its licence text is
+missing from `src/bin/` — better to fail at build time than at the user's
+first conversion.
+
+(Superseded: an earlier version of this rule said the Python build embeds
+FFmpeg and its licence text, and contrasted that with the Delphi side as two
+deliberate answers to one question. There is now one answer for both.)
+
+Whichever build is in play, the obligation is identical: **the licence
+travels with the binary.**
 
 ## The tool's own licence
 

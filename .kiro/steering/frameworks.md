@@ -52,11 +52,14 @@ package to do something the RTL already does spends it for nothing.
 ## PyInstaller
 
 - **When to use:** producing the standalone Windows EXE from the Python side
-- **Features:** one-file bundle carrying Python, Pillow **and** FFmpeg, so
-  the target machine needs nothing installed
+- **Features:** one-file bundle carrying Python and Pillow, so the target
+  machine needs neither installed. Output is
+  `src/bin/AlvConverter-Python.exe`, built by `src/python/build_exe.bat`
+- **FFmpeg is not embedded** — it sits beside the executable, the same
+  layout the Delphi build uses
 - **Installation:** `pip install -r requirements-dev.txt`
-- **Rules:** `.agents/rules/third-party-licensing.md` — a one-file bundle
-  must embed the licence text too
+- **Rules:** `.agents/rules/third-party-licensing.md` — the licence text
+  travels beside `ffmpeg.exe`, in the same folder as both executables
 
 ## Decision guide
 
@@ -65,7 +68,7 @@ Need to convert a recording to MP4?          -> FFmpeg pipe (alv2mp4 / Alv.FFmpe
 Need frames as images?                       -> PNG export (alv_extract / Alv.Export)
                                                 does NOT need FFmpeg
 Need to validate a file without output?      -> alv_inspect
-Deploying where nothing may be installed?    -> Python one-file EXE (PyInstaller)
+Deploying where nothing may be installed?    -> Python one-file EXE (needs ffmpeg.exe beside it)
 Deploying where dependencies are unwelcome?  -> Delphi EXE + ffmpeg.exe beside it
 Exploring an open format question?           -> Python side: it has the test suite
 ```

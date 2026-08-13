@@ -15,7 +15,7 @@ credit them explicitly — not just link to them once in a README aside.
 | [FFmpeg](https://ffmpeg.org/) | Encodes the reconstructed frames to MP4. Vendored as a build from [gyan.dev](https://www.gyan.dev/ffmpeg/builds/); the provenance and hash discipline this kit teaches is written around it | GPLv3 (this build; see `THIRD_PARTY_NOTICES` discipline in `third-party-licensing.md`) |
 | [Pillow](https://python-pillow.org/) | Decodes codec-1 JPEG payloads and writes PNG frames in the Python implementation | MIT-CMU |
 | [zlib](https://zlib.net/) | Codec-0 payloads are zlib streams; the defensive size-validation rule exists around them | zlib |
-| [PyInstaller](https://pyinstaller.org/) | One-file packaging of the Python build, bundling Python, Pillow and FFmpeg | GPLv2+ with a bootloader exception |
+| [PyInstaller](https://pyinstaller.org/) | One-file packaging of the Python build, bundling Python and Pillow | GPLv2+ with a bootloader exception |
 | [x264](https://www.videolan.org/developers/x264.html) | Present in the vendored FFmpeg build, and the reason its licence class is GPLv3 — the exact case `third-party-licensing.md` is written about | GPLv2+ |
 
 ## 💼 Commercial

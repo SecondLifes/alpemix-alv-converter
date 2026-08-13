@@ -7,7 +7,7 @@ own language rather than a transliteration of the other.
 
 - **Languages:** Object Pascal (Delphi) and Python 3.11+
 - **Compiler/Runtime:** RAD Studio 37.0 (Win32 console) · CPython 3.11+
-- **Build System:** `build.ps1` (Delphi) · `build_exe.ps1` + PyInstaller (Python)
+- **Build System:** `build.ps1` (Delphi) · `build_exe.bat` + PyInstaller (Python)
 - **Native IDE:** RAD Studio for the Delphi side; any editor for Python
 - **Platform:** **Windows, required.** Exact 8-bit decoding needs the
   Windows GDI halftone palette — this is a correctness constraint, not a
@@ -21,7 +21,7 @@ own language rather than a transliteration of the other.
 | Pillow 12.x | Python only: decodes codec-1 JPEG payloads, writes PNG frames |
 | zlib | Codec-0 payloads on both sides |
 | FFmpeg | External process; receives raw `rgb24` frames over a pipe |
-| PyInstaller 6.14+ | One-file packaging of the Python build |
+| PyInstaller 6.14+ | One-file packaging of the Python build (FFmpeg not embedded) |
 
 ## Databases
 

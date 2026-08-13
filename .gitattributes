@@ -1,0 +1,8 @@
+# cmd.exe reads batch files by byte offset and loses its place on LF-only
+# line endings — it executes fragments of lines ("'tlocal' is not recognized").
+# Batch files must arrive with CRLF on every clone, on every platform.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# PowerShell is tolerant, but keeping it consistent avoids surprises.
+*.ps1 text eol=crlf

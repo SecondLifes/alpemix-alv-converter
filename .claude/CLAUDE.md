@@ -75,7 +75,7 @@ silently; let the user decide.
 - **Native IDE/Runtime:** RAD Studio 37.0; CPython 3.11+. Windows required (GDI halftone palette)
 - **Main Libraries:** Delphi — RTL + WinAPI only. Python — Pillow 12.x. FFmpeg as an external process
 - **Tests:** Python `unittest` with synthetic fixtures; **Delphi has no automated suite** (`.claude/rules/testing.md`)
-- **Build / Tooling:** `build.ps1` (Delphi), `build_exe.ps1` + PyInstaller (Python)
+- **Build / Tooling:** `build.ps1` (Delphi), `build_exe.bat` + PyInstaller (Python). Neither build embeds FFmpeg — both expect `ffmpeg.exe` beside the executable
 
 ## Crucial Directives (Evidence Discipline & Defensive Parsing)
 - **Never guess at an ungraded format path — reject it.** A converter that

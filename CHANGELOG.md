@@ -62,6 +62,53 @@ Use only the sections that actually apply — don't ship empty headings:
 ### Added / ### Changed / ### Fixed / ### Removed / ### Deprecated / ### Security
 -->
 
+### Fixed
+
+- The Python build could never have worked: `src/python/AlvConverter.spec`
+  line 7 read `project_dir /../ "bin"`, which is not valid Python (`..` is not
+  a token). PyInstaller executes the spec as Python, so the build died with a
+  `SyntaxError` before doing anything. A second, independent failure sat
+  behind it — the build script copied `THIRD_PARTY_NOTICES.md` from the
+  project directory, where no such file exists
+
+### Added
+
+- `src/python/build_exe.bat` — builds the Python one-file executable.
+  Checks each precondition separately so a failure names which one
+  (`ffmpeg.exe` and `FFMPEG_LICENSE.txt` present in `src/bin/`), passes
+  `--distpath src/bin` and `--workpath src/temp`, and verifies the artifact
+  exists before reporting success. When the interpreter it is given has no
+  PyInstaller, it provisions a private virtual environment under
+  `src/temp/buildvenv` and builds from there — the system Python is never
+  modified, and running the script with no arguments just works
+- `.gitattributes` — forces CRLF on `*.bat`, `*.cmd` and `*.ps1`. `cmd.exe`
+  reads batch files by byte offset and loses its place on LF-only endings,
+  executing fragments of lines (`'tlocal' is not recognized`). Observed on
+  the first run of this very script, whose author wrote it with LF endings
+
+### Removed
+
+- `src/python/build_exe.ps1` — replaced by `build_exe.bat`
+
+### Changed
+
+- The Python build no longer embeds FFmpeg. It packs Python and Pillow only;
+  `ffmpeg.exe` stays a separate replaceable file beside the executable, which
+  is the layout the Delphi build already used. `resolve_ffmpeg()` finds it
+  through `Path(sys.executable).with_name("ffmpeg.exe")`, the real executable
+  path when frozen. Verified end to end: the built executable reports
+  `FFmpeg: ...\srcinfmpeg.exe`
+- The Python artifact is named `AlvConverter-Python.exe`. It lands in
+  `src/bin/`, where the Delphi build's `AlvConverter.exe` already lives — the
+  previous name would have silently overwritten it
+- `.agents/rules/third-party-licensing.md`, `.agents/rules/python-conventions.md`,
+  `.kiro/steering/frameworks.md`, `.kiro/steering/tech.md`, `AGENTS.md`,
+  `.claude/CLAUDE.md`, both READMEs and both ACKNOWLEDGMENTS files updated to
+  describe the one bundling strategy that now applies to both builds
+- `.gitignore` and `.cursorignore` exclude `src/temp/` (Delphi `.dcu` output,
+  PyInstaller's work directory, any local build venv); `.cursorignore` also
+  excludes `src/bin/`, which holds a 100 MB `ffmpeg.exe`
+
 ## [0.1.0] - 2026-08-13
 
 ### Added

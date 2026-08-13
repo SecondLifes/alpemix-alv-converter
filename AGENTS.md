@@ -126,8 +126,10 @@ stack would actually flag.
 - **Tests:** Python — `unittest` with synthetic fixtures. Delphi — **no
   automated suite**; verified by cross-implementation frame comparison
   (`testing.md`)
-- **Build:** Delphi — RAD Studio 37.0 via `build.ps1`. Python — PyInstaller
-  one-file via `build_exe.ps1`
+- **Build:** Delphi — RAD Studio 37.0 via `build.ps1`, output
+  `src/bin/AlvConverter.exe`. Python — PyInstaller one-file via
+  `src/python/build_exe.bat`, output `src/bin/AlvConverter-Python.exe`.
+  Neither embeds FFmpeg; both expect `ffmpeg.exe` beside them
 - **File extensions:** `.pas`, `.dpr` (Delphi); `.py` (Python); `.ps1`
   (build scripts); `.alv` (the input recordings)
 
@@ -206,7 +208,7 @@ Python:  alv_core.py                all format knowledge, one module
 | Windows GDI (Delphi) | Supplies the 8-bit halftone palette at runtime via `CreateHalftonePalette` — never a hardcoded table (`alv-format.md`) |
 | zlib | Codec 0 payloads. Expanded size is checked against the declared ceiling and the exact expected bitmap length before allocation |
 | FFmpeg (external process) | Receives raw `rgb24` frames over a pipe; stderr is drained while writing and the exit code is checked (`streaming-pipeline.md`) |
-| PyInstaller 6.14+ | One-file packaging of the Python build, bundling Python, Pillow and FFmpeg (`third-party-licensing.md`) |
+| PyInstaller 6.14+ | One-file packaging of the Python build, bundling Python and Pillow. FFmpeg stays a separate file beside the executable (`third-party-licensing.md`) |
 
 No web framework, ORM, DI container or serialization library is used, and
 none should be introduced — the Delphi build's value is that it needs
