@@ -67,14 +67,15 @@ analysis/
 # this repo publishes their built binaries, so the source that produced them
 # is visible too. What stays out is everything that is generated or huge:
 #
-#   src/bin/    build output and the release archive; the 53 MB zip is already
-#               published as a release asset, and committing it would carry the
-#               same bytes a second time, permanently, in every clone
 #   src/temp/   Delphi .dcu output, PyInstaller's work directory, build venv
+#
+# src/bin/ IS committed, deliberately: the release archive ships in the repo as
+# well as on the releases page, so a clone carries the runnable build without a
+# separate download. The cost is real and was accepted — 53 MB in every clone,
+# permanently, and the same bytes stored twice.
 #
 # A real .alv recording is proprietary and never belongs in git either; the
 # staging rules are in .agents/rules/input-resolution.md.
-src/bin/
 src/temp/
 *.alv
 

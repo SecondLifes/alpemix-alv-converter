@@ -63,6 +63,11 @@ that break something else in the kit.
   visible too. `src/bin/` and `src/temp/` stay out — the release archive is
   already a release asset, and committing it would carry the same 53 MB into
   every clone forever. `*.alv` stays out unconditionally
+- `src/bin/Relase.zip` — the release archive is now committed as well as
+  published as a release asset, so a clone carries the runnable build (both
+  executables, `ffmpeg.exe`, its licence text) without a separate download.
+  The cost was accepted knowingly: 53 MB in every clone, the same bytes stored
+  in two places, and git history keeps them permanently
 - Scanned before publishing: no credentials, tokens, absolute user paths,
   hostnames, IP addresses or e-mail addresses in any committed source. The
   `apiKey=` occurrences in `AlvConverter.dproj` are RAD Studio's empty template

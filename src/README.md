@@ -13,11 +13,18 @@ These are the sources the published release binaries were built from. The
 conventions they follow are not optional — see `.agents/rules/delphi-conventions.md`
 and `.agents/rules/python-conventions.md`.
 
+## Committed — the built archive
+
+`bin/` carries the release archive (`Relase.zip`, 53 MB: both executables,
+`ffmpeg.exe` and its licence text). It is also published as a release asset;
+keeping it here too means a clone has the runnable build without a separate
+download. The cost was accepted knowingly — every clone pulls those 53 MB, and
+git history keeps them forever.
+
 ## Not committed — working area
 
 | Path | Why it stays out of git |
 |---|---|
-| `bin/` | Build output and the release archive. The archive is already published as a release asset; committing it would carry the same 53 MB a second time, permanently, into every clone |
 | `temp/` | Delphi `.dcu` output, PyInstaller's work directory, the local build venv |
 | `*.alv` | A real recording is proprietary, large, and never belongs in this repo |
 

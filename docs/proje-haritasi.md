@@ -145,6 +145,8 @@ elle oluşturana kadar **hiçbir skill Claude Code tarafından görülmez**
 
 Yayınlanan release binary'lerinin üretildiği kaynaklar bunlar. Uyguladıkları konvansiyonlar opsiyonel değil — bkz. `delphi-conventions.md`, `python-conventions.md`.
 
-**Commit'siz — çalışma alanı:** `bin/` (derleme çıktısı ve 53 MB'lık release arşivi — arşiv zaten release varlığı, commit'lemek aynı byte'ları her klona kalıcı olarak ikinci kez taşırdı), `temp/` (Delphi `.dcu`, PyInstaller work dizini, yerel build venv) ve her `*.alv` (tescilli kayıt, asla git'e girmez).
+**Commit'li — derlenmiş arşiv:** `bin/Relase.zip` (53 MB: iki çalıştırılabilir, `ffmpeg.exe` ve lisans metni). Aynı arşiv release varlığı olarak da yayında; repoda da tutulması, klonlayanın ayrı indirme yapmadan çalışan build'e sahip olması demek. Bedeli bilerek kabul edildi: her klon bu 53 MB'ı çeker ve git geçmişinden bir daha çıkmaz.
+
+**Commit'siz — çalışma alanı:** `temp/` (Delphi `.dcu`, PyInstaller work dizini, yerel build venv) ve her `*.alv` (tescilli kayıt, asla git'e girmez).
 
 Aynı zamanda üzerinde çalışılan kaydın bırakıldığı yer ve AI'nin ürettiği teslim edilebilirlerin varsayılan çıktı kökü. Hangi kaydın konu olduğunu çözmek `input-resolution.md`'nin işi. `examples/`'dan farkı: `examples/` küratörlü referans içerik, `src/` gerçek kaynak + gerçek üretilen iş.
