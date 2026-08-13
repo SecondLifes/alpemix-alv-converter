@@ -499,7 +499,7 @@ Always load, regardless of tool:
 Skills are shared: `.agents/skills/**/SKILL.md` is the single editable copy —
 no tool ever gets its own duplicate of a SKILL.md. Claude Code does need its
 own *entry point*, because it discovers skills only under `.claude/skills/`;
-`tools/generate-ai-configs.ps1` creates one junction/symlink there per skill,
+One junction/symlink is created there per skill by hand (`mklink /J`),
 pointing back at `.agents/skills/`. Those links are generated, gitignored, and
 never hand-made. (Corrected: this section previously claimed every tool reads
 `.agents/skills/` natively as a fallback location — it does not, and the

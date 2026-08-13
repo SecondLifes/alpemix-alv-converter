@@ -173,27 +173,21 @@ diğerine karşı da doğru okunur.
 ├── GEMINI.md                        # 🌐 Gemini CLI giriş noktası — .gemini/rules/project-rules.md'yi import eder
 ├── CHANGELOG.md                     # Sürüm geçmişi; settings.json ile git tag'leri çelişirse hakem
 │
-├── tools/
-│   ├── generate-ai-configs.ps1      # .claude/rules, .cursor/rules (.mdc), .claude/commands ve
-│   │                                 # .claude/skills linklerini .agents/'tan yeniden üretir —
-│   │                                 # .agents/ altında değişiklikten sonra ve klonladıktan sonra bir kez çalıştır
-│   └── verify-kit.ps1               # Mekanik tutarlılık kapısı — CI'ın çalıştırdığı kontrollerin aynısı
-│
 ├── .claude/
 │   ├── CLAUDE.md                    # 🧠 Claude için ana sistem prompt'u
 │   ├── settings.json                # İzin ayarları
-│   ├── commands/                    # ⚙️ .agents/commands'tan ÜRETİLMİŞ — elle düzenleme
+│   ├── commands/                    # 📋 .agents/commands'ın elle tutulan kopyası — kaynağı düzenle
 │   │   └── review.md
-│   ├── rules/                       # ⚙️ .agents/rules'tan ÜRETİLMİŞ — elle düzenleme
-│   └── skills/                      # ⚙️ .agents/skills'e ÜRETİLMİŞ linkler — gitignore'lu, içerik değil
+│   ├── rules/                       # 📋 .agents/rules'ın elle tutulan kopyası — kaynağı düzenle
+│   └── skills/                      # 🔗 .agents/skills'e linkler — gitignore'lu, mklink /J ile açılır
 │
 ├── .github/
 │   ├── copilot-instructions.md      # 🤖 GitHub Copilot ön-prompt'u (elle yazılır, AGENTS.md'ye referans verir)
 │   └── workflows/
-│       └── verify.yml               # CI: push ve PR'da tools/verify-kit.ps1 çalıştırır
+│       └── verify.yml               # CI: push ve PR'da .agents/ kopyalarını sürüklenmeye karşı kontrol eder
 │
 ├── .cursor/
-│   └── rules/                       # ⚙️ .agents/rules'tan *.mdc olarak ÜRETİLMİŞ — elle düzenleme
+│   └── rules/                       # 📋 .agents/rules'ın *.mdc kopyası — kaynağı düzenle
 │
 ├── .gemini/
 │   └── rules/
@@ -224,7 +218,7 @@ diğerine karşı da doğru okunur.
 
 ## 🔧 Ön Koşullar
 
-- **PowerShell 7+ (`pwsh`)** — `tools/generate-ai-configs.ps1`'i çalıştırmak için gerekli.
+- **PowerShell 7+ (`pwsh`)** — Delphi derleme script'i için gerekli. AI yapılandırma kopyaları için araç gerekmez; elle senkron tutulurlar.
 - **Node.js / `npx`** — sadece paketlenmiş `rad-skill-finder` skill'inin
   birincil arama yolu (`npx skills find <konu>`) için gerekli. Kitin
   kendisini kullanmak için şart değil; yoksa `rad-skill-finder` web-tabanlı
@@ -251,7 +245,6 @@ ProjeniZ/
 ├── src/                             # staging: .alv buraya bırakılır; üretilen çıktı buraya iner
 ├── AGENTS.md          ← kökten kopyala
 ├── .agents/            ← klasörü kopyala (tek kaynak: kurallar, komutlar, skill'ler)
-├── tools/               ← klasörü kopyala (generate-ai-configs.ps1)
 ├── .claude/            ← klasörü kopyala (üretilmiş kurallar/komutlar zaten dahil)
 ├── .github/             ← klasörü kopyala
 ├── .cursor/            ← klasörü kopyala (üretilmiş kurallar zaten dahil)
@@ -261,7 +254,7 @@ ProjeniZ/
 ```
 
 `.agents/rules/` veya `.agents/commands/` altında sonradan bir dosya
-ekler/düzenlersen, proje kökünden `pwsh tools/generate-ai-configs.ps1`
+ekler/düzenlersen, dosyayı elle `.claude/rules/`'a ve `.cursor/rules/`'a (`.mdc` olarak)
 komutunu yeniden çalıştırarak `.claude/rules`, `.cursor/rules` ve
 `.claude/commands`'ı tazele.
 
@@ -374,8 +367,8 @@ bakın — bunun için herkese açık bir issue açmayın.
 
 Kısa versiyon — favori framework'ün/kütüphanen için AI rehberi gerekiyorsa ekle:
 
-1. **Kural** → `.agents/rules/framework-adin.md`, sonra `.claude/rules/` ve `.cursor/rules/`'ı yeniden üretmek için `pwsh tools/generate-ai-configs.ps1` çalıştır — bu iki klasörü **elle düzenleme**, bir sonraki çalıştırmada üzerine yazılır.
-2. **Skill** → `.agents/skills/framework-adin/SKILL.md` (tek kopya, düzenlendiği tek yer — üretilecek içerik yok, ama Claude Code'un hem `.claude/skills/framework-adin` linkini — bu olmadan skill'i hiç keşfedemez — hem de eşleşen `/framework-adin` komut sarmalayıcısını alması için sonrasında `pwsh tools/generate-ai-configs.ps1` çalıştır).
+1. **Kural** → `.agents/rules/framework-adin.md`, sonra dosyayı elle `.claude/rules/` ve `.cursor/rules/`'a (`.mdc` olarak) kopyala — bu iki klasörü **doğrudan düzenleme**; onları yeniden üreten bir şey yok, değişiklik sessizce ayrışır.
+2. **Skill** → `.agents/skills/framework-adin/SKILL.md` (tek kopya, düzenlendiği tek yer). Sonrasında Claude Code'un linkini elle aç — `mklink /J ".claude\skillsramework-adin" ".agents\skillsramework-adin"` — bu olmadan skill hiç keşfedilmez; ayrıca eşleşen `/framework-adin` sarmalayıcısını `.claude/commands/` altına ekle.
 3. **Referans** → `AGENTS.md`'de (ve framework/veritabanı-özelse `.gemini/rules/project-rules.md`'de, mevcut girdilerle tutarlı şekilde) bahset.
 
 ### Nasıl katkıda bulunulur

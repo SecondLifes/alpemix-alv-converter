@@ -107,18 +107,20 @@ hub's `settings.json`.
 
 ## Registering this kit
 
-This kit carries no registration logic of its own — it only knows how to
-find and call the workspace's own script, through the hub root's symlink:
+This kit carries no registration logic of its own. It used to ship a
+`tools\register.bat` wrapper; that file was removed along with the rest of
+`tools/`, so registration is now done by calling the hub's own script
+directly, from the kit's root folder:
 
-```batch
-tools\register.bat                    :: register under this folder's own name
-tools\register.bat -Name my-kit       :: register under an explicit name
-tools\register.bat -Unregister        :: remove the entry
+```powershell
+pwsh "$env:ProgramData\rad\rad.ps1" -Action Register
+pwsh "$env:ProgramData\rad\rad.ps1" -Action Register -Name my-kit
+pwsh "$env:ProgramData\rad\rad.ps1" -Action Register -Unregister
 ```
 
-`register.bat` checks for `%ProgramData%\rad\rad.ps1` first — if the hub
-isn't installed on this machine, it says so plainly (`Hub kurulu değil.`)
-and stops; it never tries to register anywhere else.
+Check that `%ProgramData%\rad\rad.ps1` exists before running it. If it does
+not, the hub is not installed on this machine — say so plainly and stop;
+never try to register anywhere else, and never guess at the hub's location.
 
 Re-run it after moving or re-cloning the kit — a registration pointing at
 a path that no longer exists is reported as `STALE REGISTRATION` by
@@ -176,7 +178,7 @@ never meant to be committed.
    personal keys already exist — it does **not** rediscover or
    re-register kits on its own. If `settings.json` is deleted (not just
    the links), every kit's registration is gone until each one re-runs
-   its own `tools\register.bat`, and any personal top-level keys (stack
+   its own registration command, and any personal top-level keys (stack
    install paths, etc.) are gone for good unless you'd written them down
    elsewhere. Treat `settings.json` itself, not the links around it, as
    the one thing in the hub root actually worth being careful with.

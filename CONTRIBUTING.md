@@ -34,8 +34,8 @@ naming, error-handling, and architecture conventions.
 
 To add new capability rather than fix an existing one:
 
-1. **Rule** → `.agents/rules/your-topic.md`, then run `pwsh tools/generate-ai-configs.ps1` to regenerate `.claude/rules/` and `.cursor/rules/` — do **not** hand-edit those two folders directly, your change will be overwritten on the next run.
-2. **Skill** → `.agents/skills/your-skill/SKILL.md` (one copy, the only place it is ever edited — no content to regenerate, but run `pwsh tools/generate-ai-configs.ps1` afterward so Claude Code gets both its `.claude/skills/your-skill` link, without which it never discovers the skill, and the matching `/your-skill` command wrapper).
+1. **Rule** → `.agents/rules/your-topic.md`, then copy it by hand to `.claude/rules/your-topic.md` and `.cursor/rules/your-topic.mdc` (note the `.mdc`) — do **not** edit those two folders directly; nothing regenerates them, so an edit made only there silently diverges from the source.
+2. **Skill** → `.agents/skills/your-skill/SKILL.md` (one copy, the only place it is ever edited). Afterwards create the link Claude Code needs — `mklink /J ".claude\skills\your-skill" ".agents\skills\your-skill"` — without which it never discovers the skill, plus a thin `/your-skill` wrapper at `.claude/commands/your-skill.md`.
 3. **Reference** → mention it in `AGENTS.md` (and `.gemini/rules/project-rules.md` if it's framework/database-specific, matching the existing entries) and in `docs/proje-haritasi.md`.
 
 ### Testing

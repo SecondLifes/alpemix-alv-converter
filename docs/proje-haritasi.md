@@ -2,7 +2,7 @@
 
 > Bu dosya, kitin altındaki her dosya/klasörün **ne işe yaradığını, ne olduğunu ve ne olmadığını** açıklar. Amaç: yeni birinin (insan ya da AI) kaynağı tek tek açmadan, sadece bu haritadan yönünü bulabilmesi. Bu kit, `template-builder` skill'inin yeni bir spec-kit inşa ederken kopyaladığı **boş (dil/stack-bağımsız) scaffold**'dur — belirli bir dile/stack'e özgü içerik yok, sadece mimari/mekanizma var.
 >
-> **Güncel kalması nasıl sağlanıyor:** `template-builder`, bu scaffold'dan bir kopya çıkarıp doldururken, `.agents/rules/`, `.agents/commands/` veya `.agents/skills/` altına bir şey eklenip/çıkarılınca bu dosyanın kopyası da aynı turda elle güncellenmelidir (bkz. `.agents/rules/sync-workflow.md`). `tools/generate-ai-configs.ps1`, her çalıştığında `.agents/` altındaki her dosyanın burada adı geçip geçmediğini kontrol edip eksik olanları **uyarı olarak** yazdırır — ama açıklamayı otomatik yazmaz, sadece unutulmadığını garanti eder.
+> **Güncel kalması nasıl sağlanıyor:** `template-builder`, bu scaffold'dan bir kopya çıkarıp doldururken, `.agents/rules/`, `.agents/commands/` veya `.agents/skills/` altına bir şey eklenip/çıkarılınca bu dosyanın kopyası da aynı turda elle güncellenmelidir (bkz. `.agents/rules/sync-workflow.md`). Bunu kontrol eden bir script yok: kit `tools/` klasörü taşımıyor, dolayısıyla eksik bir satır kimseye uyarı olarak görünmez.
 
 ## Bu kit nedir, ne değildir
 
@@ -33,7 +33,7 @@ Kuralların, komutların ve becerilerin (skills) **gerçek içeriği sadece `.ag
 | `CONTRIBUTING.md` / `CONTRIBUTING.tr-TR.md` | "Contributing to {spec-kits-name}" — hata bildirimi, PR süreci, teknik standartlara (AGENTS.md'ye referansla) işaret. README.tr-TR.md gibi paralel çift. |
 | `SECURITY.md` / `SECURITY.tr-TR.md` | Güvenlik açığı bildirme süreci — Supported Versions tablosu `:white_check_mark:`/`:x:` kullanır. README.tr-TR.md gibi paralel çift. |
 | `.gitignore` | Genel (dil-agnostik) git-ignore kuralları — node_modules, .venv, .env, log/temp dosyaları vb. Stack-özgü derleme çıktısı desenleri template-builder tarafından eklenir. |
-| `.cursorignore` | Cursor'un indekslemeyeceği yollar — `.agents/`, `tools/` gibi önemli yollar burada asla dışlanmaz. |
+| `.cursorignore` | Cursor'un indekslemeyeceği yollar — `.agents/` gibi önemli yollar burada asla dışlanmaz. `src/temp/` ve `src/bin/` dışlanır (derleme artıkları ve 100 MB'lık `ffmpeg.exe`). |
 
 ## `.agents/` — Tek Kaynak (Single Source of Truth)
 
@@ -105,13 +105,20 @@ Bu klasörlerin çoğu **üretilmiş** (generated) içerik barındırır — kay
 | `.specify/*.md` (4 şablon) | Elle yazılır | Spec-driven geliştirme şablonları (`constitution.md`, `spec-template.md`, `plan-template.md`, `tasks-template.md`) — büyük bir özellik eklerken kod yazmadan önce doldurulması önerilen, opsiyonel şablonlar. Çoğu zaten dil-agnostik; birkaçında stack-özgü yer tutucu kalmamış. |
 | `.vscode/settings.json` | Elle yazılır | VS Code'un `files.exclude`/`search.exclude` ayarları — şu an sadece genel (OS/dependency) desenler var, stack-özgü derleme çıktıları template-builder tarafından eklenir. |
 
-## `tools/`
+## `tools/` — yok
 
-| Dosya | Ne işe yarar |
-|---|---|
-| `register.bat` | Bu kiti makine-geneli `.rad` registry'sine kaydeder — kendi kayıt mantığını taşımaz, sadece hub kökündeki symlink üzerinden workspace'in kendi `rad.ps1`'ini `-Action Register` ile çağırır. Hub kurulu değilse sadece "Hub kurulu değil." der, durur. `-Name` ile farklı ad, `-Unregister` ile kayıt silme. Kit taşınınca/yeniden klonlanınca tekrar çalıştırılmalı. |
-| `verify-kit.ps1` | Mekanik tutarlılık kapısı, `.github/workflows/verify.yml`'ın çalıştırdığı script'in aynısı — yerelde de `pwsh tools/verify-kit.ps1` ile çalışır. Kontroller: generator drift (üretilmiş kopyalar commit'lenenden farklı mı), `.cursor/rules` altındaki her dosya `.mdc` mi, `.claude/skills/` her skill için giriş taşıyor mu, her `SKILL.md`'nin frontmatter'ı geçerli mi, doldurulmamış şablon işareti kalmış mı, README'nin gömdüğü görseller diskte var mı, `LICENSE` duruyor mu. |
-| `generate-ai-configs.ps1` | `.agents/rules` ve `.agents/commands`'ı okuyup `.claude/rules` (`.md`) ve `.cursor/rules`'a (`.mdc` — Cursor bu klasörde `.md`'yi yok sayar) kopyalayan, ayrıca her `.agents/skills/*` için `.claude/skills/` altına link üreten PowerShell script. Ayrıca `.agents/skills/*` altındaki her klasör için `.claude/commands/<skill-adı>.md` adında ince bir komut sarmalayıcısı üretir — isim bir hand-authored komutla çakışırsa o skill için üretim atlanır ve uyarı basılır. `.agents/rules`, `.agents/commands` altında bir dosya eklenip/silinip/değiştirildiğinde VEYA `.agents/skills` altına bir skill eklenip/kaldırıldığında çalıştırılması **zorunludur** (bkz. `sync-workflow.md`). Dil/stack-agnostik — hiçbir değişiklik gerektirmez. |
+Bu kit `tools/` klasörü **taşımıyor**. Daha önce üç script vardı ve üçü de
+bilerek kaldırıldı:
+
+| Kaldırılan | Ne yapıyordu | Yerine ne var |
+|---|---|---|
+| `generate-ai-configs.ps1` | `.agents/rules`+`.agents/commands`'ı `.claude/` ve `.cursor/`'a kopyalar, her skill için `.claude/skills/` altına link üretirdi | Kopyalar **elle** tutuluyor; sürüklenmeyi `.github/workflows/verify.yml` yakalıyor (`sync-workflow.md`) |
+| `verify-kit.ps1` | Mekanik tutarlılık kapısı (sürüklenme, `.mdc` uzantısı, frontmatter, yer tutucu, README görselleri, LICENSE) | Kontrollerin çoğu CI workflow'una satır içi taşındı; frontmatter ve README-görsel kontrolleri artık **hiç** çalışmıyor |
+| `register.bat` | Kiti `.rad` hub'ına kaydederdi | Hub'ın kendi script'i doğrudan çağrılıyor (`local-machine-registry.md`) |
+
+Bunun bedeli açıkça yazılsın: kiti klonlayan biri `.claude/skills/` girişlerini
+elle oluşturana kadar **hiçbir skill Claude Code tarafından görülmez**
+(`mklink /J`, bkz. `sync-workflow.md`). Eskiden tek komuttu.
 
 ## `docs/`
 

@@ -104,15 +104,17 @@ silently; let the user decide.
 
 ## Rules, Commands and Skills — Source of Truth
 
-`.claude/rules/*.md` and `.claude/commands/*.md` are **generated** copies of
+`.claude/rules/*.md` and `.claude/commands/*.md` are **copies** of
 `.agents/rules/*.md` and `.agents/commands/*.md` (the real source of truth,
 shared with Cursor). Never hand-edit a file directly under `.claude/rules/` or
 `.claude/commands/` — edit the corresponding file under `.agents/` instead,
-then immediately run:
+then copy it over in the same turn.
 
-```powershell
-pwsh tools/generate-ai-configs.ps1
-```
+This kit has **no `tools/` folder**: the generator that used to do the copying
+was removed, so nothing does it for you and nothing overwrites a stray edit
+either — the two just diverge silently. A rule also has to reach
+`.cursor/rules/<name>.mdc` (note the extension). CI checks for drift on every
+push.
 
 Skills (`.agents/skills/*/SKILL.md`) need no such step — read/write them
 directly, no copy exists elsewhere. Full rationale: `.agents/rules/sync-workflow.md`.

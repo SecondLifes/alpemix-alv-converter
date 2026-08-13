@@ -16,17 +16,18 @@ what a consumer of this kit can rely on.
 ## Mandatory: record every file that was added, removed or renamed
 
 **Any commit that adds, deletes or renames a file under `.agents/rules/`,
-`.agents/commands/`, `.agents/skills/`, `tools/`, or any root-level document
-must name that file here, in the same commit.** Not "updated the rules" —
+`.agents/commands/`, `.agents/skills/`, or any root-level document must name
+that file here, in the same commit.** Not "updated the rules" —
 the actual path, and one clause saying what it is for.
 
 This is not bookkeeping for its own sake. Three things in this kit read the
 file inventory and go wrong silently when it drifts:
 
-- `docs/proje-haritasi.md` claims what exists, and the count gate in
-  `tools/verify-kit.ps1` compares those claims against disk.
-- `tools/generate-ai-configs.ps1` generates one copy or link per source file;
-  a file nobody recorded is a file nobody notices going stale.
+- `docs/proje-haritasi.md` claims what exists, and nothing checks those claims
+  against disk any more — this kit has no `tools/` folder.
+- Every source file under `.agents/` has hand-made copies under `.claude/` and
+  `.cursor/`; a file nobody recorded is a file whose copies nobody notices
+  going missing.
 - Anyone auditing this kit later reconstructs "what changed and why" from the
   CHANGELOG plus `git log`. A summary that says only "improvements" forces
   them to re-derive the inventory by hand, which is exactly how the counts
@@ -51,6 +52,43 @@ about files appearing, disappearing or moving, because those are the changes
 that break something else in the kit.
 
 ## [Unreleased]
+
+### Removed
+
+- `tools/generate-ai-configs.ps1` — produced `.claude/rules/`, `.cursor/rules/`
+  (`.mdc`), `.claude/commands/` and the `.claude/skills/` links from `.agents/`
+- `tools/verify-kit.ps1` — the mechanical consistency gate
+- `tools/register.bat` — registered this kit with the machine-wide `.rad` hub
+
+The `tools/` folder no longer exists. What each script did still has to happen;
+it is now manual, and documented where it is needed rather than assumed:
+
+### Changed
+
+- `.agents/rules/sync-workflow.md` rewritten around hand-syncing: which copy
+  belongs to which source, the `mklink /J` command for skill links, a drift
+  check to run before committing, and a plain statement of the cost — anyone
+  cloning this kit has no `.claude/skills/` entries, and therefore no skills
+  reachable by Claude Code, until they create the junctions themselves
+- `.agents/rules/local-machine-registry.md` — registration now calls the hub's
+  own `rad.ps1 -Action Register` directly instead of the removed wrapper
+- `.github/workflows/verify.yml` no longer invokes the deleted script. It runs
+  the checks inline instead: rule and command copies match their `.agents/`
+  source, no orphaned copy whose source was deleted, `.cursor/rules` uses
+  `.mdc`, no unfilled placeholders, `LICENSE` present. This workflow is now the
+  only thing standing between a forgotten copy and a rule that applies to one
+  tool but not another
+- `.claude/settings.json`'s allow-list is empty — the command it pre-approved
+  is gone
+- `docs/proje-haritasi.md`'s `tools/` section now records what was removed and
+  what replaced it, rather than describing three files that are not there
+- `AGENTS.md`, `.claude/CLAUDE.md`, both READMEs and both CONTRIBUTING files
+  updated: the `.claude/` and `.cursor/` folders are hand-synced copies, not
+  generated output, and nothing overwrites a stray edit any more
+
+**Not replaced, and worth knowing:** `verify-kit.ps1`'s `SKILL.md` frontmatter
+validation and its README image-embed check have no successor. Nothing verifies
+either now.
 
 <!--
 Accumulate entries here as work lands. On release: rename this heading to
@@ -116,7 +154,7 @@ Use only the sections that actually apply — don't ship empty headings:
 
 - Initial kit scaffold: `.agents/` as the single source of truth (rules,
   commands, skills), with `.claude/`, `.cursor/` and `.claude/skills/`
-  generated from it by `tools/generate-ai-configs.ps1`
+  derived from it
 - **Nine topic rules** under `.agents/rules/`, every one drafted from
   evidence observed in a real Delphi + Python ALV converter, none invented:
   - `alv-format.md` — the container itself: header, record envelope, block

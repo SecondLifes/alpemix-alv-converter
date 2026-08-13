@@ -1,37 +1,86 @@
+# This kit has no tools/ folder. It used to run tools/verify-kit.ps1 here, and
+# the generator kept .claude/ and .cursor/ in step with .agents/ automatically.
+# Both are gone, so the copies are now synced by hand — which means this
+# workflow is the only thing that catches a forgotten one. See
+# .agents/rules/sync-workflow.md.
+
 name: verify
 
-# Mechanical consistency gate for this kit. Every check lives in
-# tools/verify-kit.ps1 rather than inline here, so the exact same gate can be
-# run locally before pushing:
-#
-#     pwsh tools/verify-kit.ps1
-#
-# One implementation, two callers — a workflow that reimplemented the checks
-# would drift from the local one, which is the class of bug this kit's whole
-# single-source-of-truth design exists to avoid.
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-  workflow_dispatch:
-
-permissions:
-  contents: read
+on: [push, pull_request]
 
 jobs:
-  verify:
+  sync:
+    name: .agents copies are in sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # ubuntu-latest ships PowerShell 7 preinstalled, so no setup step is
-      # needed. The generator handles the non-Windows case itself (symlink
-      # instead of junction for .claude/skills entries).
-      - name: Show PowerShell version
-        shell: pwsh
-        run: $PSVersionTable.PSVersion.ToString()
+      - name: Rule copies match their .agents source
+        run: |
+          status=0
+          shopt -s nullglob
+          for src in .agents/rules/*.md; do
+            name=$(basename "$src" .md)
+            for copy in ".claude/rules/$name.md" ".cursor/rules/$name.mdc"; do
+              if [ ! -f "$copy" ]; then
+                echo "::error file=$src::missing copy $copy"
+                status=1
+              elif ! diff -q "$src" "$copy" >/dev/null; then
+                echo "::error file=$copy::out of sync with $src"
+                status=1
+              fi
+            done
+          done
+          exit $status
 
-      - name: Verify kit consistency
-        shell: pwsh
-        run: ./tools/verify-kit.ps1
+      - name: Command copies match their .agents source
+        run: |
+          status=0
+          shopt -s nullglob
+          for src in .agents/commands/*.md; do
+            copy=".claude/commands/$(basename "$src")"
+            if [ ! -f "$copy" ]; then
+              echo "::error file=$src::missing copy $copy"
+              status=1
+            elif ! diff -q "$src" "$copy" >/dev/null; then
+              echo "::error file=$copy::out of sync with $src"
+              status=1
+            fi
+          done
+          exit $status
+
+      - name: No orphaned copies whose source was deleted
+        run: |
+          status=0
+          shopt -s nullglob
+          for copy in .claude/rules/*.md; do
+            src=".agents/rules/$(basename "$copy")"
+            [ -f "$src" ] || { echo "::error file=$copy::no source at $src"; status=1; }
+          done
+          for copy in .cursor/rules/*.mdc; do
+            src=".agents/rules/$(basename "$copy" .mdc).md"
+            [ -f "$src" ] || { echo "::error file=$copy::no source at $src"; status=1; }
+          done
+          exit $status
+
+      - name: Cursor rules use the .mdc extension
+        run: |
+          # Cursor recognizes only .mdc under .cursor/rules and silently
+          # ignores .md there, so a stray .md is a rule nobody applies.
+          shopt -s nullglob
+          stray=(.cursor/rules/*.md)
+          if [ ${#stray[@]} -gt 0 ]; then
+            printf '::error file=%s::.cursor/rules must use .mdc, not .md\n' "${stray[@]}"
+            exit 1
+          fi
+
+      - name: No unfilled placeholders
+        run: |
+          if grep -rIn --exclude-dir=.git --exclude-dir=skills -e '\[FILL IN' \
+               --include='*.md' --include='*.mdc' --include='*.json' . ; then
+            echo "::error::unfilled [FILL IN placeholders above"
+            exit 1
+          fi
+
+      - name: LICENSE is present
+        run: test -f LICENSE

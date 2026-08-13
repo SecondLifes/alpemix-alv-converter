@@ -1,9 +1,7 @@
 {
-  "$comment": "Claude Code project settings. Schema: permissions.allow / permissions.ask / permissions.deny, with rules written as Tool(specifier) — NOT the invented allowCommands/denyPaths keys an earlier version of this scaffold used, which Claude Code ignored entirely, so neither the credential protection nor the pre-approved generator command actually existed.",
+  "$comment": "Claude Code project settings. Schema: permissions.allow / permissions.ask / permissions.deny, with rules written as Tool(specifier) — NOT the invented allowCommands/denyPaths keys an earlier version of this scaffold used, which Claude Code ignored entirely, so neither the credential protection nor the pre-approved generator command actually existed. The allow list is empty because this kit has no tools/ folder any more; the rule copies under .claude/ and .cursor/ are synced by hand (.agents/rules/sync-workflow.md).",
   "permissions": {
-    "allow": [
-      "Bash(pwsh tools/generate-ai-configs.ps1)"
-    ],
+    "allow": [],
     "deny": [
       "Read(./**/*.env)",
       "Read(./**/.env)",

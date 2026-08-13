@@ -14,7 +14,7 @@ written fresh from patterns observed in those documents.
 
 ## Mechanical gates
 
-`pwsh tools/verify-kit.ps1`:
+`pwsh tools/verify-kit.ps1`, as it stood at the time of the audit:
 
 | Gate | Result |
 |---|---|
@@ -28,8 +28,13 @@ written fresh from patterns observed in those documents.
 | Declared counts | OK — 13 rules / 4 skills match disk |
 | Dead references | OK — every backticked repo-relative path resolves |
 
-`pwsh tools/generate-ai-configs.ps1` additionally reports
+`pwsh tools/generate-ai-configs.ps1` additionally reported
 `docs/proje-haritasi.md` coverage OK and folder/reference consistency OK.
+
+**Both scripts have since been removed** along with the rest of `tools/`. This
+section is left as the record of what passed when the kit was built; the checks
+it describes are no longer runnable here. `.github/workflows/verify.yml` now
+carries the drift and placeholder checks inline.
 
 ---
 

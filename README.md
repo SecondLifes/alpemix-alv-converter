@@ -81,7 +81,7 @@ The **Alpemix ALV Converter AI Spec-Kit** is not a code framework — it's a set
 > Rules and commands have a single canonical source at `.agents/rules/` and
 > `.agents/commands/`; `.claude/rules`, `.cursor/rules` (as `.mdc`),
 > `.claude/commands` and the `.claude/skills/` links are all generated from it
-> by `tools/generate-ai-configs.ps1` — see `.agents/rules/sync-workflow.md`.
+> by hand from `.agents/` — see `.agents/rules/sync-workflow.md`.
 > Run that script once after cloning: the skill links are machine-local and
 > deliberately not committed, so without it Claude Code finds no skills.
 
@@ -176,27 +176,21 @@ reads correctly against the other.
 ├── GEMINI.md                        # 🌐 Gemini CLI entry point — imports .gemini/rules/project-rules.md
 ├── CHANGELOG.md                     # Version history; arbiter when settings.json and git tags disagree
 │
-├── tools/
-│   ├── generate-ai-configs.ps1      # Regenerates .claude/rules, .cursor/rules (.mdc), .claude/commands
-│   │                                 # and the .claude/skills links from .agents/ — run after any edit
-│   │                                 # under .agents/rules|commands|skills, and once after cloning
-│   └── verify-kit.ps1               # Mechanical consistency gate — same checks CI runs
-│
 ├── .claude/
 │   ├── CLAUDE.md                    # 🧠 Master system prompt for Claude
 │   ├── settings.json                # Permission settings
-│   ├── commands/                    # ⚙️ GENERATED from .agents/commands — do not hand-edit
+│   ├── commands/                    # 📋 Hand-synced copy of .agents/commands — edit the source, not this
 │   │   └── review.md
-│   ├── rules/                       # ⚙️ GENERATED from .agents/rules — do not hand-edit
-│   └── skills/                      # ⚙️ GENERATED links → .agents/skills — gitignored, not content
+│   ├── rules/                       # 📋 Hand-synced copy of .agents/rules — edit the source, not this
+│   └── skills/                      # 🔗 Links → .agents/skills — gitignored, created with mklink /J
 │
 ├── .github/
 │   ├── copilot-instructions.md      # 🤖 Pre-prompt for GitHub Copilot (hand-authored, references AGENTS.md)
 │   └── workflows/
-│       └── verify.yml               # CI: runs tools/verify-kit.ps1 on push and PR
+│       └── verify.yml               # CI: checks .agents/ copies for drift on push and PR
 │
 ├── .cursor/
-│   └── rules/                       # ⚙️ GENERATED from .agents/rules as *.mdc — do not hand-edit
+│   └── rules/                       # 📋 Hand-synced copy of .agents/rules as *.mdc — edit the source
 │
 ├── .gemini/
 │   └── rules/
@@ -230,7 +224,7 @@ reads correctly against the other.
 
 ## 🔧 Prerequisites
 
-- **PowerShell 7+ (`pwsh`)** — required to run `tools/generate-ai-configs.ps1`.
+- **PowerShell 7+ (`pwsh`)** — used by the Delphi build script. The AI config copies need no tooling; they are kept in step by hand.
 - **Node.js / `npx`** — required only for the bundled `rad-skill-finder` skill's
   primary search path (`npx skills find <topic>`). Not required to use the
   kit itself; without it, `rad-skill-finder` falls back to its web-based
@@ -257,7 +251,6 @@ YourProject/
 ├── src/                             # staging: drop the .alv here; generated output lands here
 ├── AGENTS.md          ← copy from the root
 ├── .agents/           ← copy the folder (single source of truth: rules, commands, skills)
-├── tools/             ← copy the folder (generate-ai-configs.ps1)
 ├── .claude/           ← copy the folder (generated rules/commands already included)
 ├── .github/           ← copy the folder
 ├── .cursor/           ← copy the folder (generated rules already included)
@@ -267,7 +260,7 @@ YourProject/
 ```
 
 If you later add or edit a file under `.agents/rules/` or `.agents/commands/`,
-re-run `pwsh tools/generate-ai-configs.ps1` from the project root to refresh
+copy it into `.claude/rules/` and `.cursor/rules/` (as `.mdc`) by hand to refresh
 `.claude/rules`, `.cursor/rules` and `.claude/commands`.
 
 ### 3. AI automatically takes over the rules
@@ -375,7 +368,7 @@ open a public issue for it.
 
 Quick version — if your favorite framework or library needs a guide for AI, add:
 
-1. **Rule** → `.agents/rules/your-framework.md`, then run `pwsh tools/generate-ai-configs.ps1` to regenerate `.claude/rules/` and `.cursor/rules/` — do **not** hand-edit those two folders directly, your change will be overwritten on the next run.
+1. **Rule** → `.agents/rules/your-framework.md`, then copy it to `.claude/rules/` and `.cursor/rules/` (as `.mdc`) to regenerate `.claude/rules/` and `.cursor/rules/` — do **not** hand-edit those two folders directly, your change will be overwritten on the next run.
 2. **Skill** → `.agents/skills/your-framework/SKILL.md` (one copy, the only place it is ever edited — no content to regenerate, but run `pwsh tools/generate-ai-configs.ps1` afterward so Claude Code gets both its `.claude/skills/your-framework` link, without which it never discovers the skill, and the matching `/your-framework` command wrapper).
 3. **Reference** → mention it in `AGENTS.md` (and `.gemini/rules/project-rules.md` if it's framework/database-specific, matching the existing entries).
 

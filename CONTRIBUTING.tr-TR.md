@@ -34,7 +34,7 @@ konvansiyonları için `AGENTS.md`'nin "Main Guidelines" bölümüne bakın.
 
 Mevcut bir şeyi düzeltmek yerine yeni bir yetenek eklemek için:
 
-1. **Kural** → `.agents/rules/konu-adin.md`, sonra `.claude/rules/` ve `.cursor/rules/`'ı yeniden üretmek için `pwsh tools/generate-ai-configs.ps1` çalıştırın — bu iki klasörü **elle düzenlemeyin**, bir sonraki çalıştırmada üzerine yazılır.
+1. **Kural** → `.agents/rules/konu-adin.md`, sonra dosyayı elle `.claude/rules/konu-adin.md` ve `.cursor/rules/konu-adin.mdc` olarak kopyalayın (uzantıya dikkat: `.mdc`) — bu iki klasörü **doğrudan düzenlemeyin**; onları yeniden üreten bir şey yok, dolayısıyla sadece orada yapılan bir değişiklik kaynaktan sessizce ayrışır.
 2. **Skill** → `.agents/skills/skill-adiniz/SKILL.md` (tek kopya, düzenlendiği tek yer — üretilecek içerik yok, ama Claude Code'un hem `.claude/skills/skill-adiniz` linkini — bu olmadan skill'i hiç keşfedemez — hem de eşleşen `/skill-adiniz` komut sarmalayıcısını alması için sonrasında `pwsh tools/generate-ai-configs.ps1` çalıştırın).
 3. **Referans** → `AGENTS.md`'de (ve framework/veritabanı-özelse `.gemini/rules/project-rules.md`'de, mevcut girdilerle tutarlı şekilde) ve `docs/proje-haritasi.md`'de bahsedin.
 
