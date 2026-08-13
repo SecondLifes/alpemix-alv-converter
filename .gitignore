@@ -63,12 +63,20 @@ analysis/
 .claude/skills/
 
 # --- Working staging area ---
-# src/ is a drop box for the recording being worked on and for anything the
-# AI generates (.agents/rules/input-resolution.md). It is not repo content:
-# a real .alv recording is proprietary and large, and the converter's own
-# Delphi/Python sources live in their own project, not in this kit.
-src/*
-!src/README.md
+# The converter's own Delphi and Python sources under src/ ARE repo content —
+# this repo publishes their built binaries, so the source that produced them
+# is visible too. What stays out is everything that is generated or huge:
+#
+#   src/bin/    build output and the release archive; the 53 MB zip is already
+#               published as a release asset, and committing it would carry the
+#               same bytes a second time, permanently, in every clone
+#   src/temp/   Delphi .dcu output, PyInstaller's work directory, build venv
+#
+# A real .alv recording is proprietary and never belongs in git either; the
+# staging rules are in .agents/rules/input-resolution.md.
+src/bin/
+src/temp/
+*.alv
 
 # --- Image variant sets kept locally, not shipped ---
 docs/images/*/

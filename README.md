@@ -216,7 +216,7 @@ reads correctly against the other.
 ├── examples/                        # Complete, compilable example code
 │                                     # (empty — add real examples here as the stack is filled in)
 │
-└── src/                             # 🎯 Default working/output root — AI-generated
+└── src/                             # 🎯 Converter source (delphi/, python/) + working/output root — AI-generated
     └── README.md                    # deliverables go here unless told otherwise (see AGENTS.md)
 ```
 
@@ -248,7 +248,8 @@ git clone https://github.com/SecondLifes/alpemix-alv-converter
 
 ```
 YourProject/
-├── src/                             # staging: drop the .alv here; generated output lands here
+├── src/                             # delphi/ + python/ — the converter's own source (committed)
+│                                    # also the staging area: drop the .alv here (gitignored)
 ├── AGENTS.md          ← copy from the root
 ├── .agents/           ← copy the folder (single source of truth: rules, commands, skills)
 ├── .claude/           ← copy the folder (generated rules/commands already included)

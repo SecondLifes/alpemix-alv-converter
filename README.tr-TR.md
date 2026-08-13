@@ -242,7 +242,8 @@ git clone https://github.com/SecondLifes/alpemix-alv-converter
 
 ```
 ProjeniZ/
-├── src/                             # staging: .alv buraya bırakılır; üretilen çıktı buraya iner
+├── src/                             # delphi/ + python/ — converter'ın kendi kaynağı (commit'li)
+│                                    # ayrıca staging alanı: .alv buraya bırakılır (gitignore'lu)
 ├── AGENTS.md          ← kökten kopyala
 ├── .agents/            ← klasörü kopyala (tek kaynak: kurallar, komutlar, skill'ler)
 ├── .claude/            ← klasörü kopyala (üretilmiş kurallar/komutlar zaten dahil)

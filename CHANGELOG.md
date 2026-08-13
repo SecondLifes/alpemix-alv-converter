@@ -53,6 +53,21 @@ that break something else in the kit.
 
 ## [Unreleased]
 
+### Added
+
+- The converter's own sources are now committed: `src/delphi/` (`Alv.Core`,
+  `Alv.FFmpeg`, `Alv.Export`, `Alv.Converter`, `AlvConverter.dpr`,
+  `AlvConverter.dproj`) and `src/python/` (`alv_core.py`, `alv_inspect.py`,
+  `alv_extract.py`, `alv2mp4.py`, `AlvConverter.spec`, `build_exe.bat`). This
+  repo publishes their built binaries, so the source that produced them is
+  visible too. `src/bin/` and `src/temp/` stay out — the release archive is
+  already a release asset, and committing it would carry the same 53 MB into
+  every clone forever. `*.alv` stays out unconditionally
+- Scanned before publishing: no credentials, tokens, absolute user paths,
+  hostnames, IP addresses or e-mail addresses in any committed source. The
+  `apiKey=` occurrences in `AlvConverter.dproj` are RAD Studio's empty template
+  defaults
+
 ### Removed
 
 - `tools/generate-ai-configs.ps1` — produced `.claude/rules/`, `.cursor/rules/`

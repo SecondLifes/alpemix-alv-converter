@@ -16,7 +16,8 @@ original.
 
 ## 2. Otherwise, use what is staged in `src/`
 
-With no path in the request, look in `src/` for `.alv` files.
+With no path in the request, look in `src/` for `.alv` files — the staging
+area only; `src/delphi/` and `src/python/` hold source code, not recordings.
 
 - Exactly one → use it, and say which file was picked.
 - More than one → **list them as a numbered pick-list and ask.** Do not
@@ -45,10 +46,17 @@ worthless if it worked on the wrong recording.
 - Frame export goes to a directory, and a full export is tens of thousands
   of files. Warn about the size before starting one, and offer the limit.
 
-## `src/` is staging, not storage
+## `src/` is two things — know which one you are looking at
 
-`src/` is a drop box for the recording currently being worked on, and the
-kit's default location for anything it generates. It is not an archive.
-Do not accumulate recordings there, and do not treat a leftover file from
-a previous session as the current input without confirming — that is
-exactly the case tier 2's pick-list exists for.
+`src/delphi/` and `src/python/` are the converter's own **committed source**.
+Nothing in this rule applies to them; they are not staged input and are never
+treated as work product to be overwritten.
+
+Everything else under `src/` is the staging area: the recording currently
+being worked on, and the default location for anything the kit generates.
+`src/bin/` (build output, release archive) and `src/temp/` (build scratch) are
+gitignored, and so is any `*.alv`.
+
+The staging area is not an archive. Do not accumulate recordings there, and do
+not treat a leftover file from a previous session as the current input without
+confirming — that is exactly the case tier 2's pick-list exists for.

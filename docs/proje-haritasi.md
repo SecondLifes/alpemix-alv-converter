@@ -134,4 +134,17 @@ elle oluşturana kadar **hiçbir skill Claude Code tarafından görülmez**
 
 ## `src/`
 
-Bu projenin **varsayılan çalışma/çıktı kökü** — kullanıcı başka bir yer belirtmedikçe, AI'nin ürettiği gerçek teslim edilebilirler (script, modül, ne istendiyse) buraya yazılır. `examples/`'dan farkı: `examples/` küratörlü referans içerik, `src/` ise gerçek üretilen iş. Şu an sadece kendi amacını açıklayan bir `README.md` içeriyor — boş klasör git'te izlenmediği için bu dosya aynı zamanda klasörün var olmasını garanti ediyor. `AGENTS.md`'nin "Working Directory" bölümüne bakın.
+İki farklı şey barındırıyor ve ikisini ayrı tutmak önemli.
+
+**Commit'li — converter'ın kendisi:**
+
+| Klasör | İçerik |
+|---|---|
+| `delphi/` | Delphi implementasyonu: `Alv.Core`, `Alv.FFmpeg`, `Alv.Export`, `Alv.Converter` ve `AlvConverter.dpr` giriş noktası. Sadece RTL + Windows API, üçüncü parti paket yok. |
+| `python/` | Python implementasyonu: `alv_core.py` ve eylem başına birer ince giriş noktası (`alv_inspect`, `alv_extract`, `alv2mp4`), PyInstaller spec'i, `build_exe.bat`. |
+
+Yayınlanan release binary'lerinin üretildiği kaynaklar bunlar. Uyguladıkları konvansiyonlar opsiyonel değil — bkz. `delphi-conventions.md`, `python-conventions.md`.
+
+**Commit'siz — çalışma alanı:** `bin/` (derleme çıktısı ve 53 MB'lık release arşivi — arşiv zaten release varlığı, commit'lemek aynı byte'ları her klona kalıcı olarak ikinci kez taşırdı), `temp/` (Delphi `.dcu`, PyInstaller work dizini, yerel build venv) ve her `*.alv` (tescilli kayıt, asla git'e girmez).
+
+Aynı zamanda üzerinde çalışılan kaydın bırakıldığı yer ve AI'nin ürettiği teslim edilebilirlerin varsayılan çıktı kökü. Hangi kaydın konu olduğunu çözmek `input-resolution.md`'nin işi. `examples/`'dan farkı: `examples/` küratörlü referans içerik, `src/` gerçek kaynak + gerçek üretilen iş.
